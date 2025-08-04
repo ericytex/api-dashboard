@@ -11,17 +11,28 @@ const HealthCheck = () => {
     setError(null);
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
       const res = await fetch('https://ims-server-one.vercel.app/api/health', {
         method: 'GET',
-        credentials: 'include', // <-- Important!
+        credentials: 'include',
+        signal: controller.signal,
       });
+      
+      clearTimeout(timeoutId);
+      
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
       const data = await res.json();
       setResponse(data);
     } catch (e) {
-      setError(e.message);
+      if (e.name === 'AbortError') {
+        setError('Request timed out. Please try again.');
+      } else {
+        setError(e.message);
+      }
     } finally {
       setLoading(false);
     }
