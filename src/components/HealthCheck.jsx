@@ -39,28 +39,63 @@ const HealthCheck = () => {
   };
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '5px', marginBottom: '20px' }}>
-      <h3>/api/health</h3>
-      <p>Checks the health of the backend server.</p>
-      <button onClick={performHealthCheck} disabled={loading}>
-        {loading ? 'Checking...' : 'Perform Health Check'}
-      </button>
-
-      {response && (
-        <div style={{ marginTop: '15px' }}>
-          <h4>Response:</h4>
-          <pre style={{ backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px' }}>
-            {JSON.stringify(response, null, 2)}
-          </pre>
+    <div className="health-check-container">
+      <div className="health-card">
+        <div className="card-header">
+          <div className="endpoint-info">
+            <h3>🔍 Health Check Endpoint</h3>
+            <p>Monitor the backend server health and connectivity status</p>
+            <div className="endpoint-url">
+              <span className="method">GET</span>
+              <code>/api/health</code>
+            </div>
+          </div>
         </div>
-      )}
 
-      {error && (
-        <div style={{ marginTop: '15px', color: 'red' }}>
-          <h4>Error:</h4>
-          <p>{error}</p>
+        <div className="card-body">
+          <button 
+            onClick={performHealthCheck} 
+            disabled={loading}
+            className="action-button"
+          >
+            {loading ? (
+              <>
+                <span className="loading-spinner"></span>
+                Checking Health...
+              </>
+            ) : (
+              <>
+                <span className="button-icon">🏥</span>
+                Perform Health Check
+              </>
+            )}
+          </button>
+
+          {response && (
+            <div className="response-section success">
+              <div className="response-header">
+                <span className="status-icon">✅</span>
+                <h4>Success Response</h4>
+              </div>
+              <div className="response-content">
+                <pre>{JSON.stringify(response, null, 2)}</pre>
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="response-section error">
+              <div className="response-header">
+                <span className="status-icon">❌</span>
+                <h4>Error Response</h4>
+              </div>
+              <div className="response-content">
+                <p className="error-message">{error}</p>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

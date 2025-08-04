@@ -35,38 +35,108 @@ const Users = () => {
   };
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '5px', marginBottom: '20px' }}>
-      <h3>/api/users (Protected)</h3>
-      <p>Fetches a list of users. Requires a valid JWT token.</p>
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px' }}>JWT Token:</label>
-        <input
-          type="text"
-          value={token}
-          onChange={(e) => setToken(e.target.value)}
-          placeholder="Paste JWT token here"
-          style={{ width: '100%', padding: '5px', boxSizing: 'border-box' }}
-        />
+    <div className="users-container">
+      <div className="users-card">
+        <div className="card-header">
+          <div className="endpoint-info">
+            <h3>👥 User Management Endpoint</h3>
+            <p>Access user data and test protected endpoints</p>
+            <div className="endpoint-url">
+              <span className="method">GET</span>
+              <code>/api/users</code>
+            </div>
+          </div>
+        </div>
+
+        <div className="card-body">
+          <div className="token-section">
+            <div className="form-group">
+              <label htmlFor="token">JWT Token</label>
+              <input
+                id="token"
+                type="text"
+                value={token}
+                onChange={(e) => setToken(e.target.value)}
+                className="form-input"
+                placeholder="Paste your JWT token here"
+              />
+              <small className="help-text">
+                Use the token from the Authentication tab after successful login
+              </small>
+            </div>
+            
+            <button onClick={fetchUsers} disabled={loading || !token} className="action-button">
+              {loading ? (
+                <>
+                  <span className="loading-spinner"></span>
+                  Fetching Users...
+                </>
+              ) : (
+                <>
+                  <span className="button-icon">👥</span>
+                  Fetch Users
+                </>
+              )}
+            </button>
+          </div>
+
+          {response && (
+            <div className="response-section success">
+              <div className="response-header">
+                <span className="status-icon">✅</span>
+                <h4>Users Retrieved Successfully</h4>
+                <span className="user-count">{response.length} users found</span>
+              </div>
+              <div className="response-content">
+                <div className="users-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Created</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {response.map((user, index) => (
+                        <tr key={user.id || index}>
+                          <td>{user.id}</td>
+                          <td>{user.name}</td>
+                          <td>{user.email}</td>
+                          <td>
+                            <span className={`role-badge role-${user.role}`}>
+                              {user.role}
+                            </span>
+                          </td>
+                          <td>{new Date(user.created_at).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <details className="raw-data">
+                  <summary>View Raw JSON Response</summary>
+                  <pre>{JSON.stringify(response, null, 2)}</pre>
+                </details>
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="response-section error">
+              <div className="response-header">
+                <span className="status-icon">❌</span>
+                <h4>Failed to Fetch Users</h4>
+              </div>
+              <div className="response-content">
+                <p className="error-message">{error}</p>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-      <button onClick={fetchUsers} disabled={loading}>
-        {loading ? 'Fetching Users...' : 'Fetch Users'}
-      </button>
-
-      {response && (
-        <div style={{ marginTop: '15px' }}>
-          <h4>Response:</h4>
-          <pre style={{ backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px' }}>
-            {JSON.stringify(response, null, 2)}
-          </pre>
-        </div>
-      )}
-
-      {error && (
-        <div style={{ marginTop: '15px', color: 'red' }}>
-          <h4>Error:</h4>
-          <p>{error}</p>
-        </div>
-      )}
     </div>
   );
 };

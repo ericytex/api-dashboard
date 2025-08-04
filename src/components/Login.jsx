@@ -35,50 +35,94 @@ const Login = () => {
   };
 
   return (
-    <div style={{ border: '1px solid #ccc', padding: '15px', borderRadius: '5px', marginBottom: '20px' }}>
-      <h3>/api/login</h3>
-      <p>Authenticates a user and returns a JWT token.</p>
-      <form onSubmit={performLogin}>
-        <div style={{ marginBottom: '10px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ width: '300px', padding: '5px' }}
-            required
-          />
+    <div className="login-container">
+      <div className="login-card">
+        <div className="card-header">
+          <div className="endpoint-info">
+            <h3>🔐 Authentication Endpoint</h3>
+            <p>Test user authentication and JWT token generation</p>
+            <div className="endpoint-url">
+              <span className="method">POST</span>
+              <code>/api/login</code>
+            </div>
+          </div>
         </div>
-        <div style={{ marginBottom: '15px' }}>
-          <label style={{ display: 'block', marginBottom: '5px' }}>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: '300px', padding: '5px' }}
-            required
-          />
-        </div>
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Perform Login'}
-        </button>
-      </form>
 
-      {response && (
-        <div style={{ marginTop: '15px' }}>
-          <h4>Response:</h4>
-          <pre style={{ backgroundColor: '#f5f5f5', padding: '10px', borderRadius: '5px', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-            {JSON.stringify(response, null, 2)}
-          </pre>
-        </div>
-      )}
+        <div className="card-body">
+          <form onSubmit={performLogin} className="login-form">
+            <div className="form-group">
+              <label htmlFor="email">Email Address</label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="form-input"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+            
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="form-input"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+            
+            <button type="submit" disabled={loading} className="action-button">
+              {loading ? (
+                <>
+                  <span className="loading-spinner"></span>
+                  Authenticating...
+                </>
+              ) : (
+                <>
+                  <span className="button-icon">🔐</span>
+                  Authenticate User
+                </>
+              )}
+            </button>
+          </form>
 
-      {error && (
-        <div style={{ marginTop: '15px', color: 'red' }}>
-          <h4>Error:</h4>
-          <p>{error}</p>
+          {response && (
+            <div className="response-section success">
+              <div className="response-header">
+                <span className="status-icon">✅</span>
+                <h4>Authentication Successful</h4>
+              </div>
+              <div className="response-content">
+                <div className="token-info">
+                  <h5>JWT Token:</h5>
+                  <code className="token-display">{response.token}</code>
+                </div>
+                <div className="user-info">
+                  <h5>User Details:</h5>
+                  <pre>{JSON.stringify(response.user, null, 2)}</pre>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="response-section error">
+              <div className="response-header">
+                <span className="status-icon">❌</span>
+                <h4>Authentication Failed</h4>
+              </div>
+              <div className="response-content">
+                <p className="error-message">{error}</p>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };
