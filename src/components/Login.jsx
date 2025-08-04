@@ -14,7 +14,7 @@ const Login = () => {
     setError(null);
 
     try {
-      const res = await fetch('https://ims-server-jo143dwke-ericytexs-projects.vercel.app/api/login', {
+      const res = await fetch('https://ims-server-one.vercel.app/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
