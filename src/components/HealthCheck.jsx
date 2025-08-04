@@ -11,7 +11,7 @@ const HealthCheck = () => {
     setError(null);
 
     try {
-      const res = await fetch('https://ims-server-r41toft9x-ericytexs-projects.vercel.app/api/health', {
+      const res = await fetch('https://ims-server-jo143dwke-ericytexs-projects.vercel.app/api/health', {
         method: 'GET',
         credentials: 'include', // <-- Important!
       });

@@ -16,7 +16,7 @@ const Users = () => {
     setError(null);
 
     try {
-      const res = await fetch('https://ims-server-r41toft9x-ericytexs-projects.vercel.app/api/users', {
+      const res = await fetch('https://ims-server-jo143dwke-ericytexs-projects.vercel.app/api/users', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
